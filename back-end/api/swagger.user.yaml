@@ -1,0 +1,205 @@
+components:
+  schemas:
+    common:
+        type: object
+        properties:
+          code:
+            type: integer
+            description: 状态码
+            example: 200
+          msg:
+            type: string
+            description: 消息描述
+            example: 成功
+          data:
+            type: string
+            description: 业务数据
+            example: "..."
+    UserInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 用户 ID
+          example: 1
+        name:
+          type: string
+          description: 姓名
+          example: "zhang san"
+        username:
+          type: string
+          description: 账户名
+          example: admin
+        phone:
+          type: string
+          description: 电话
+          example: 1888888888
+        photo:
+          type: string
+          description: 头像
+          example: "http://dalong.local:8081/static/image1701632006885.jpg"
+paths:
+  /user/userInfo:
+    get:
+      tags:
+        - User
+      summary: 获取当前用户的基本信息
+      security:
+        - bearerAuth: [ ]
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 状态码
+                    example: 200
+                  msg:
+                    type: string
+                    description: 消息描述
+                    example: 获取用户信息成功
+                  data:
+                    type: object
+                    $ref: '#/components/schemas/UserInfo'
+        401:
+          description: UnauthorizedError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/response/401'
+        500:
+          description: 内部错误（数据库）
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/response/500'
+  /user/userList:
+    get:
+      tags:
+        - User
+      summary: 查询用户列表
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - in: query
+          name: roleId
+          required: true
+          schema:
+            type: integer
+          description: 角色 ID
+        - in: query
+          name: page
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          description: 页数（从 1 开始）
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+            minimum: 1
+            default: 10
+          description: 每页显示的条数（默认 10 条）
+      responses:          # server responses
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/common'
+  /user/userDetail:
+    post:
+      tags:
+        - User
+      summary: 根据用户名获取当前用户信息
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - in: query
+          name: username
+          required: true
+          schema:
+            type: string
+          description: 账号
+      responses:          # server responses
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/common'
+  /user/deleteUser:
+    post:
+      tags:
+        - User
+      summary: 删除用户信息
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - in: query
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: 用户 ID
+      responses:          # server responses
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/common'
+
+definitions:        # Schema definition for the request body
+  login:
+    type: object
+    required:
+      - username
+      - password
+    properties:
+      username:
+        type: string
+        description: 登录账号
+        example: admin
+      password:
+        type: string
+        description: 登录密码
+        example: 123456
+  signup:
+    type: object
+    required:
+      - username
+      - password
+    properties:
+      username:
+        type: string
+        description: 登录账号
+        example: admin
+      password:
+        type: string
+        description: 登录密码
+        example: 123456
+      name:
+        type: string
+        description: 姓名
+        example: "zhang san"
+      phone:
+        type: string
+        description: 电话
+        example: 18616316666
+      userPic:
+        type: string
+        description: 用户图像
+        example: ''
+      roleId:
+        type: string
+        description: 角色 ID
+        example: 2

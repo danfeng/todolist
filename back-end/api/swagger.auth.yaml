@@ -1,0 +1,195 @@
+tags:
+  - name: Auth
+    description: 用户鉴权相关操作
+  - name: User
+    description: 用户管理
+components:
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+  response:
+    400:
+      type: object
+      required:
+        - code
+        - msg
+      properties:
+        code:
+          type: integer
+          description: 状态码
+          example: 400
+        msg:
+          type: string
+          description: 消息描述
+          example: 操作失败
+    401:
+      type: object
+      required:
+        - code
+        - msg
+      properties:
+        code:
+          type: integer
+          description: 错误状态
+          example: 401
+        msg:
+          type: string
+          description: 消息描述
+          example: UnauthorizedError
+    500:
+      type: object
+      required:
+        - code
+        - msg
+      properties:
+        code:
+          type: integer
+          description: 错误状态
+          example: 500
+        msg:
+          type: string
+          description: 消息描述
+          example: 数据库失败
+security:
+  - bearerAuth: []
+paths:
+  /auth/signup:
+    post:
+      tags:
+        - Auth
+      summary: 新用户注册
+      description: 注册新用户.
+      requestBody:
+        description: Optional description in *Markdown*
+        required: true
+        content:
+            application/json:
+              schema:
+                $ref: '#/definitions/signup'
+            application/x-www-form-urlencoded:
+              schema:
+                $ref: '#/definitions/signup'
+      responses:          # server responses
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 状态码
+                    example: 200
+                  msg:
+                    type: string
+                    description: 消息描述
+                    example: 注册成功
+        400:
+          description: 用户名已存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/response/400'
+        500:
+          description: 内部错误（数据库）
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/response/500'
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: 用户登录
+      description: 使用用户名登录授权.
+      requestBody:
+        description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/login'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/definitions/login'
+      responses:          # server responses
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 状态码
+                    example: 200
+                  msg:
+                    type: string
+                    description: 消息描述
+                    example: 登录成功
+                  token:
+                    type: string
+                    description: token
+                    example: "Bearer eyJh..."
+        400:
+          description: 参数校验失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/response/400'
+        500:
+          description: 内部错误（数据库）
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/response/500'
+
+definitions:        # Schema definition for the request body
+  login:
+    type: object
+    required:
+      - username
+      - password
+    properties:
+      username:
+        type: string
+        description: 登录账号
+        example: admin
+      password:
+        type: string
+        description: 登录密码
+        example: 123456
+  signup:
+    type: object
+    required:
+      - username
+      - password
+    properties:
+      username:
+        type: string
+        description: 登录账号
+        example: admin
+      password:
+        type: string
+        description: 登录密码
+        example: 123456
+      name:
+        type: string
+        description: 姓名
+        example: "zhang san"
+      phone:
+        type: string
+        description: 电话
+        example: 18616316666
+      userPic:
+        type: string
+        description: 用户图像
+        example: ''
+      roleId:
+        type: string
+        description: 角色 ID
+        example: 2

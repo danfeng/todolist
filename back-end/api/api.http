@@ -1,0 +1,193 @@
+
+
+### 注册
+< {%
+    client.global.set('a_username', "tmpuser")
+    // const username = client.global.get('a_username')
+    request.variables.set("a_password", "111111")
+%}
+POST {{baseurl}}/api/reguser
+Content-Type: application/x-www-form-urlencoded
+
+username = {{ a_username }}
+    & name = {{$random.alphanumeric(6)}}
+    & password = {{$random.integer(100000, 999999)}}
+    & phone = 1868888{{ $random.integer(1000, 9999) }}
+    & userPic = {{ $exampleServer }}
+    & roleId = 2
+
+> {%
+    client.global.set("auth_token", response.body.token);
+    client.test("判断请求成功", function() {
+        client.assert(response.body.code === 200, "Response status is not 200");
+    });
+%}
+
+### 登录
+POST {{baseurl}}/api/login
+Content-Type: application/x-www-form-urlencoded
+
+username = {{username}} & password = {{password}}
+
+> {%
+    client.global.set("auth_token", response.body.token);
+    client.test("判断请求成功", function() {
+        client.assert(response.body.code === 200, "Response status is not 200");
+    });
+%}
+
+### 获取当前登录用户信息
+GET {{baseurl}}/user/userInfo
+Content-Type: application/x-www-form-urlencoded
+Authorization: {{auth_token}}
+
+> {%
+    client.test("判断请求成功", function() {
+        client.assert(response.body.code === 200, "Response status is not 200");
+    });
+%}
+
+### 查询用户列表
+GET {{baseurl}}/user/userList?page=1&pageSize=10&roleId=1
+Content-Type: application/x-www-form-urlencoded
+Authorization: {{auth_token}}
+
+> {%
+    client.test("判断请求成功", function() {
+        client.assert(response.body.code === 200, "Response status is not 200");
+    });
+%}
+
+### 新增用户信息
+< {%
+    client.global.set('a_username', "username1")
+    // const username = client.global.get('a_username')
+    request.variables.set("a_password", "111111")
+%}
+POST {{baseurl}}/user/addUser
+Content-Type: application/x-www-form-urlencoded
+Authorization: {{auth_token}}
+
+username = {{ a_username }}
+    & name = {{$random.alphanumeric(6)}}
+    & password = {{$random.integer(100000, 999999)}}
+    & phone = 1868888{{ $random.integer(1000, 9999) }}
+    & userPic = {{ $exampleServer }}
+    & roleId = 2
+
+> {%
+    client.test("判断请求成功", function() {
+        client.assert(response.body.code === 200, "Response status is not 200");
+    });
+%}
+
+### 根据用户名查询用户
+GET {{baseurl}}/user/getUserInfo?username={{ a_username }}
+Content-Type: application/x-www-form-urlencoded
+Authorization: {{auth_token}}
+
+> {%
+    client.test("判断请求成功", function() {
+        client.assert(response.body.code === 200, "Response status is not 200");
+        client.global.set("a_userid", response.body.data.id);
+    });
+%}
+
+### 根据用户ID编辑用户信息
+< {%
+    client.global.set('a_username', "username1")
+    // const username = client.global.get('a_username')
+    request.variables.set("a_password", "111111")
+%}
+POST {{baseurl}}/user/editUser
+Content-Type: application/x-www-form-urlencoded
+Authorization: {{auth_token}}
+
+    id = {{ a_userid }}
+    & username = {{ a_username }}
+    & name = {{$random.alphanumeric(6)}}
+    & password = {{$random.integer(100000, 999999)}}
+    & phone = 1868888{{ $random.integer(1000, 9999) }}
+    & userPic = {{ $exampleServer }}
+    & roleId = 2
+
+> {%
+    client.test("判断请求成功", function() {
+        client.assert(response.body.code === 200, "Response status is not 200");
+    });
+%}
+
+### 根据用户ID删除用户
+GET {{baseurl}}/user/deleteUser?id={{ a_userid }}
+Content-Type: application/x-www-form-urlencoded
+Authorization: {{auth_token}}
+
+> {%
+    client.test("判断请求成功", function() {
+        client.assert(response.body.code === 200, "Response status is not 200");
+    });
+%}
+
+
+### 查询角色列表
+GET {{baseurl}}/user/roleList?page=2&pageSize=20
+Content-Type: application/x-www-form-urlencoded
+Authorization: {{auth_token}}
+
+> {%
+    client.test("判断请求成功", function() {
+        client.assert(response.body.code === 200, "Response status is not 200");
+    });
+    const roleId = response.body.data.filter(x=>x.roleName === 'roleName1').map(x=>x.roleId)[0]
+    client.global.set('a_roleId', roleId)
+    console.log(roleId)
+%}
+
+### 新增角色
+POST {{baseurl}}/user/addRole
+Content-Type: application/x-www-form-urlencoded
+Authorization: {{auth_token}}
+
+roleName = roleName1
+
+> {%
+    client.test("判断请求成功", function() {
+        client.assert(response.body.code === 200, "Response status is not 200");
+    });
+%}
+
+### 根据角色ID查询角色
+GET {{baseurl}}/user/getRole?roleId={{ a_roleId }}
+Content-Type: application/x-www-form-urlencoded
+Authorization: {{auth_token}}
+
+> {%
+    client.test("判断请求成功", function() {
+        client.assert(response.body.code === 200, "Response status is not 200");
+        client.global.set("a_userid", response.body.data.id);
+    });
+%}
+
+### 根据角色ID编辑角色信息
+POST {{baseurl}}/user/updateRole
+Content-Type: application/x-www-form-urlencoded
+Authorization: {{auth_token}}
+
+roleId = {{ a_roleId }} & roleName = roleName1
+
+> {%
+    client.test("判断请求成功", function() {
+        client.assert(response.body.code === 200, "Response status is not 200");
+    });
+%}
+
+### 根据角色ID删除角色
+GET {{baseurl}}/user/deleteRole?roleId={{ a_roleId }}
+Content-Type: application/x-www-form-urlencoded
+Authorization: {{auth_token}}
+
+> {%
+    client.test("判断请求成功", function() {
+        client.assert(response.body.code === 200, "Response status is not 200");
+    });
+%}
