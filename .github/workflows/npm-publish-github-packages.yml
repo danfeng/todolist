@@ -37,10 +37,7 @@ jobs:
           echo Add other actions to build,
           echo test, and deploy your project.
           echo Daily Builting...
-          cd front-end
-          npm install
-          npm run build
-          cd ..
+          cd front-end && npm install && npm run build && cd ..
           git config --local user.email "iospai@qq.com"
           git config --local user.name "paipai"
           git remote set-url origin https://${{github.actor}}:${{secrets.GITHUB_TOKEN}}@github.com/${{github.repository}}
