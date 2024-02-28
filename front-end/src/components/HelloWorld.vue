@@ -1,10 +1,7 @@
 <script setup lang="ts">
-import Watermark from '../components/Watermark.vue'
-import { ref } from 'vue'
+  import Watermark from '../components/Watermark.vue'
 
-defineProps<{ msg: string }>()
-
-const count = ref(0)
+  defineProps<{ msg: string }>()
 </script>
 
 <template>
@@ -16,17 +13,16 @@ const count = ref(0)
       <div class="content"></div>
     </Watermark>
   </div>
-
 </template>
 
 <style scoped>
-.container {
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
-}
-.content {
-  width: 500px;
-  height: 500px;
-}
+  .container {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+  }
+  .content {
+    width: 500px;
+    height: 500px;
+  }
 </style>
