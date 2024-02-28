@@ -38,6 +38,7 @@ jobs:
           echo test, and deploy your project.
           echo Daily Builting...
           cd front-end
+          npm install
           npm run build
           cd ..
           git config --local user.email "iospai@qq.com"
