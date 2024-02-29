@@ -31,10 +31,10 @@ router.post('/upload', upload.single('image'), (req, res) => {
     res.send({ code: 200, msg: '上传成功', imageUrl })
 })
 
-// 获取用户的基本信息
+// 获取当前用户的基本信息
 router.get('/userInfo', handler.getUserInfo)
 
-// 根据用户名获取当前用户信息
+// 根据用户名获取用户信息
 router.get('/userDetail', handler.getUserName)
 
 // 查询用户列表

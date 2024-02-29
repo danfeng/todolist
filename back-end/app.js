@@ -13,10 +13,10 @@ app.use(logger('dev'));
 // 自定义格式打印日志 具体格式类型可以去查看文档
 // app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 
-// // 导入CORS中间件
-// const cors = require('cors')
-// // 将CORS注册为全局中间件
-// app.use(cors())
+// 导入CORS中间件
+const cors = require('cors')
+// 将CORS注册为全局中间件
+app.use(cors())
 
 // 配置解析JSON格式的中间件
 app.use(express.json());
