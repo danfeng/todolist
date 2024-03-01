@@ -40,7 +40,7 @@
       <el-form-item label="头像" prop="userPic">
         <el-upload
             class="avatar-uploader"
-            :action="baseURL + 'my/upload'"
+            :action="baseURL + 'user/upload'"
             name="image"
             :headers="headers"
             :show-file-list="false"

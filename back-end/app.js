@@ -25,7 +25,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 // 设置静态文件上传目录
-app.use('/files', express.static(__dirname + '/files'));
+app.use('/static', express.static(__dirname + '/uploads'));
 
 // 一定要在路由之前封装res.cc函数
 app.use((req, res, next) => {

@@ -32,9 +32,7 @@ function resetWatermark() {
 }
 
 const ob = new MutationObserver((entries) => {
-  console.log('变化了 。。。。')
   for (const entry of entries) {
-    console.log(entry)
     // 处理删除情况
     for (const node of entry.removedNodes) {
       if (node === div) {

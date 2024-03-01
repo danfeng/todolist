@@ -28,7 +28,7 @@ export const $GetUserInfo = async () => {
 
 // 获取用户列表
 export const $GetUserList = async (params: object) => {
-    let ret = await $get('/user/userList', { ...params, page: 1, pageSize: 30 })
+    let ret = await $get('/user/userList', params)
     // {"code":200,"message":"获取用户信息成功","data":{"id":1,"username":"admin","phone":"66666","name":"管理员","photo":"http://dalong.local:8081/static/image1701632006885.jpg"}}
     // console.log(`ret = ${JSON.stringify(ret)}`)
     return ret

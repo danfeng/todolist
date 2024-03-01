@@ -1,5 +1,5 @@
 <template>
-  <Watermark text="禁止转载" style="background: #28c840">
+  <Watermark text="禁止转载">
     <router-view></router-view>
   </Watermark>
 </template>
